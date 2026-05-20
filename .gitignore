@@ -1,0 +1,70 @@
+# Node
+node_modules/
+
+# Next.js build output
+.next/
+out/
+.vercel/
+.vercel_build_output/
+
+# Production envs
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.iml
+
+# TypeScript
+*.tsbuildinfo
+
+# Build / cache
+dist/
+build/
+.cache/
+.cache-loader/
+.parcel-cache/
+
+# Test coverage
+coverage/
+
+# Misc
+*.env.local
+*.local
+
+# Ignore lockfile? (usually commit lockfiles)
+# package-lock.json
+# yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Logs and debug
+pids
+*.pid
+*.seed
+
+# Storybook
+storybook-static/
