@@ -50,11 +50,13 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
           {tracks.map((t) => (
             <article key={t.id} className="bg-zinc-900/60 p-4 rounded-lg flex flex-col">
               <div className="flex items-center gap-4">
-                {t.cover ? (
-                  <Image src={t.cover} alt={t.title} width={96} height={96} className="rounded" />
-                ) : (
-                  <div className="w-24 h-24 bg-zinc-800 rounded flex items-center justify-center">No cover</div>
-                )}
+                <Image
+                  src={getCoverSrc(t)}
+                  alt={t.title}
+                  width={96}
+                  height={96}
+                  className="rounded"
+                />
                 <div>
                   <h3 className="text-lg font-semibold">{t.title}</h3>
                   {t.artist && <p className="text-sm text-zinc-400">{t.artist}</p>}
@@ -153,4 +155,11 @@ function spotifyEmbedSrc(url?: string) {
     // fallback
   }
   return url
+}
+
+function getCoverSrc(t: Track) {
+  // Prefer YouTube thumbnail when we have a youtubeId (use hqdefault for compatibility)
+  if (t.youtubeId) return `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`
+  if (t.cover) return t.cover
+  return '/images/hero-graffiti.png'
 }
