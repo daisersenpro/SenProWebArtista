@@ -29,7 +29,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Sígueme</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="https://spotify.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-green-500">Spotify</a></li>
+              <li><a href="https://open.spotify.com/intl-es/artist/5S0wmFnnXu6Wo2ARLXG7v6?si=tMtR1LMzTrW4ilaAQ7h8Mw" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-green-500">Spotify</a></li>
               <li><a href="https://www.youtube.com/@DaiserSen-Pro_1" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-red-500">YouTube</a></li>
               <li><a href="https://www.instagram.com/senprodaiser?utm_source=qr&igsh=MTIxc2tjODJ3bXNlNg==" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-pink-500">Instagram</a></li>
               <li><a href="https://x.com/sendaiser" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-blue-400">Twitter / X</a></li>
