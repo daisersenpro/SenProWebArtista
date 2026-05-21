@@ -7,6 +7,7 @@ type VideoItem = {
   title: string
   thumbnail: string
   src: string
+  page?: string
   provider?: 'youtube' | 'instagram' | 'file'
   orientation?: 'portrait' | 'landscape'
   embeddable?: boolean
