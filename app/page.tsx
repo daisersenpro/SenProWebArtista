@@ -5,6 +5,7 @@ import Gallery from '../components/Gallery'
 import Merch from '../components/Merch'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
+import Videos from '../components/Videos'
 
 export default function Home() {
   return (
@@ -12,12 +13,7 @@ export default function Home() {
       <Hero />
       <Bio />
       <MusicSection />
-      <section id="videos" className="py-24 bg-black/40">
-        <div className="container">
-          <h2 className="text-3xl font-bold mb-6">Video destacado</h2>
-          <p className="text-gray-400">Preview YouTube — en construcción</p>
-        </div>
-      </section>
+      <Videos />
       <Merch />
       <Gallery />
       <Contact />

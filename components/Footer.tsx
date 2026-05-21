@@ -34,6 +34,7 @@ export default function Footer() {
               <li><a href="https://www.instagram.com/senprodaiser?utm_source=qr&igsh=MTIxc2tjODJ3bXNlNg==" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-pink-500">Instagram</a></li>
               <li><a href="https://x.com/sendaiser" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-blue-400">Twitter / X</a></li>
               <li><a href="https://www.facebook.com/share/18S76y3RGY/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-blue-600">Facebook</a></li>
+              <li><a href="https://www.tiktok.com/@senpro_daiser?_r=1&_t=ZS-96WwrJYgLGn" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-black">TikTok</a></li>
             </ul>
           </div>
         </div>

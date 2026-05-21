@@ -49,7 +49,6 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
     <section id="music" className="py-24">
       <div className="container">
         <h2 className="text-3xl font-bold mb-6">Música</h2>
-        <p className="text-gray-400 mb-6">Escucha integrado en la página o abre en tu app favorita.</p>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tracks.map((t) => (
@@ -194,8 +193,6 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
             </article>
           ))}
         </div>
-
-        <div className="mt-8 text-gray-400">Pásame las URLs públicas de Spotify/Apple/YouTube y las añado aquí.</div>
       </div>
     </section>
   )

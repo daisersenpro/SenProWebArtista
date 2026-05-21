@@ -68,3 +68,10 @@ pids
 
 # Storybook
 storybook-static/
+
+# Ignore local video files and ffmpeg tool
+/public/videos/*.mp4
+/.tools/ffmpeg/
+
+# Thumbnails generated during development
+public/images/thumbs/
