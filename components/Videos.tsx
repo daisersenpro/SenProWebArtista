@@ -40,6 +40,15 @@ export default function Videos() {
       orientation: 'landscape'
     },
     {
+      id: 'tocata-conmemorativo',
+      title: 'Conmemorativo: Cristian G y Flaco R',
+      thumbnail: 'https://scontent.cdninstagram.com/v/t51.71878-15/497128515_1208230477373104_5868942483490244625_n.jpg?stp=cmp1_dst-jpg_e35_s640x640_tt6&_nc_cat=101&_nc_ohc=OOhx2M-dUTsQ7kNvwEmZ4oL&_nc_oc=AdpLCF_lAGcf-Ty2KIMszDqI4iB1EaIInPpdQBGrpPrK4LhQE2gezlVNeTXjXMkT-jo&_nc_ht=scontent.cdninstagram.com&oh=00_Af51rpDg6-5Cj5T49EfwIxu-xHDs83l4N0dzNzzb1YwsbA&oe=6A143130',
+      src: 'https://www.instagram.com/reel/C75NMVAgty0/embed/captioned/',
+      provider: 'instagram',
+      orientation: 'landscape',
+      embeddable: true
+    },
+    {
       id: 'the-flor-1',
       title: 'The Flor',
       thumbnail: 'https://via.placeholder.com/800x450?text=The+Flor',
