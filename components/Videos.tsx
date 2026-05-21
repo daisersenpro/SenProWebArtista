@@ -147,23 +147,33 @@ export default function Videos() {
               </div>
               <div className={activeVideo.orientation === 'portrait' ? 'mx-auto aspect-[9/16] w-full max-w-[360px]' : 'aspect-video w-full'}>
                 {activeVideo.provider === 'instagram' ? (
-                  <div className="h-full w-full flex items-center justify-center">
-                    <a
-                      href={activeVideo.page || activeVideo.src}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative h-full w-full block"
-                    >
-                      <img src={activeVideo.thumbnail} alt={activeVideo.title} className="h-full w-full object-cover" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="rounded-full bg-black/50 p-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" className="text-white fill-current">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
+                  activeVideo.embeddable ? (
+                    <iframe
+                      src={activeVideo.src}
+                      title={activeVideo.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="h-full w-full"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center">
+                      <a
+                        href={activeVideo.page || activeVideo.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative h-full w-full block"
+                      >
+                        <img src={activeVideo.thumbnail} alt={activeVideo.title} className="h-full w-full object-cover" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="rounded-full bg-black/50 p-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" className="text-white fill-current">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                    </a>
-                  </div>
+                      </a>
+                    </div>
+                  )
                 ) : activeVideo.provider === 'youtube' ? (
                   activeVideo.embeddable ? (
                     <iframe
