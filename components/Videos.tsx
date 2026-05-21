@@ -44,6 +44,7 @@ export default function Videos() {
       title: 'Conmemorativo: Cristian G y Flaco R',
       thumbnail: 'https://scontent.cdninstagram.com/v/t51.71878-15/497128515_1208230477373104_5868942483490244625_n.jpg?stp=cmp1_dst-jpg_e35_s640x640_tt6&_nc_cat=101&_nc_ohc=OOhx2M-dUTsQ7kNvwEmZ4oL&_nc_oc=AdpLCF_lAGcf-Ty2KIMszDqI4iB1EaIInPpdQBGrpPrK4LhQE2gezlVNeTXjXMkT-jo&_nc_ht=scontent.cdninstagram.com&oh=00_Af51rpDg6-5Cj5T49EfwIxu-xHDs83l4N0dzNzzb1YwsbA&oe=6A143130',
       src: 'https://www.instagram.com/reel/C75NMVAgty0/embed/captioned/',
+      page: 'https://www.instagram.com/reel/C75NMVAgty0/',
       provider: 'instagram',
       orientation: 'landscape',
       embeddable: true
@@ -146,13 +147,23 @@ export default function Videos() {
               </div>
               <div className={activeVideo.orientation === 'portrait' ? 'mx-auto aspect-[9/16] w-full max-w-[360px]' : 'aspect-video w-full'}>
                 {activeVideo.provider === 'instagram' ? (
-                  <iframe
-                    src={activeVideo.src}
-                    title={activeVideo.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="h-full w-full"
-                  />
+                  <div className="h-full w-full flex items-center justify-center">
+                    <a
+                      href={activeVideo.page || activeVideo.src}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative h-full w-full block"
+                    >
+                      <img src={activeVideo.thumbnail} alt={activeVideo.title} className="h-full w-full object-cover" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="rounded-full bg-black/50 p-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" className="text-white fill-current">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
                 ) : activeVideo.provider === 'youtube' ? (
                   activeVideo.embeddable ? (
                     <iframe
