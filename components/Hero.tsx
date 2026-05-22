@@ -54,7 +54,6 @@ export default function Hero() {
 
         <div className="flex justify-center gap-4 mt-8">
           <Link href="#music" className="px-6 py-3 bg-white text-black rounded-md font-semibold">Escuchar música</Link>
-          <Link href="#videos" className="px-6 py-3 border border-white rounded-md">Ver videos</Link>
         </div>
       </div>
     </section>

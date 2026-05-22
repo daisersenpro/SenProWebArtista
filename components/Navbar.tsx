@@ -11,7 +11,6 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-6 text-sm">
           <Link href="#music" className="hover:underline">Música</Link>
-          <Link href="#videos" className="hover:underline">Videos</Link>
           <Link href="#bio" className="hover:underline">Historia</Link>
           <Link href="#gallery" className="hover:underline">Galería</Link>
           <Link href="#contact" className="hover:underline">Contacto</Link>
