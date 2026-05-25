@@ -1,10 +1,11 @@
 "use client"
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 type Track = {
   id: string
   title: string
   artist?: string
+  releaseType?: 'Single' | 'EP' | 'Album'
   cover?: string
   spotifyUrl?: string
   appleUrl?: string
@@ -16,28 +17,41 @@ const SAMPLE_TRACKS: Track[] = [
     id: 'selecto',
     title: 'Selecto',
     artist: 'SenPro',
-    cover: '/images/hero-graffiti.png',
-    spotifyUrl: 'https://open.spotify.com/intl-es/track/6Jqu1docD0gSErK8vgnNei?si=6b957861adb04a09',
-    appleUrl: 'https://music.apple.com/cl/song/selecto-feat-sailrapper-shinnius/1854058945',
+    releaseType: 'Single',
+    cover: '/images/portadas/1_Selecto.jpg',
     youtubeId: 'Rku8UbjhfbE',
   },
   {
-    id: 'mamacita',
-    title: 'Mamacita',
+    id: 'en-la-ciudad',
+    title: 'En La Ciudad',
     artist: 'SenPro',
-    cover: '/images/hero-graffiti.png',
-    spotifyUrl: 'https://open.spotify.com/intl-es/track/1UhqFJN8cDWZ7NK6vLstIl?si=b8af955d617c4c08',
-    appleUrl: 'https://music.apple.com/cl/album/mamacita-feat-kogollete-single/1826673645',
-    youtubeId: 'DpHmVAPZ--k',
+    releaseType: 'Single',
+    cover: '/images/portadas/4_En la ciudad.jpg',
+    youtubeId: 'yNsMXmiIHlI',
   },
   {
-    id: 'en-la-cuidad',
-    title: 'En La Cuidad',
+    id: 'el-tiempo-no-perdona',
+    title: 'El Tiempo No Perdona',
     artist: 'SenPro',
-    cover: '/images/hero-graffiti.png',
-    spotifyUrl: 'https://open.spotify.com/intl-es/track/7eGlePIv2I2c5wgwTuKVWi?si=e45d681559f74306',
-    appleUrl: 'https://music.apple.com/cl/song/en-la-ciudad/1793143469',
-    youtubeId: 'yNsMXmiIHlI',
+    releaseType: 'Single',
+    cover: '/images/portadas/5_El tiempo no perdona.jpg',
+    youtubeId: 'vO8bZW7Yf1g',
+  },
+  {
+    id: 'rap-heavy',
+    title: 'Rap Heavy',
+    artist: 'SenPro',
+    releaseType: 'Single',
+    cover: '/images/portadas/3_Rap Heavy.jpg',
+    youtubeId: 'nua4DpqxCUM',
+  },
+  {
+    id: 'no-me-daba-cuenta',
+    title: 'No Me Daba Cuenta',
+    artist: 'SenPro',
+    releaseType: 'Single',
+    cover: '/images/portadas/2_No me daba cuenta.jpg',
+    youtubeId: 'sJJ-MPN2ANg',
   },
 ]
 
@@ -45,14 +59,54 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
   const [activeSpotify, setActiveSpotify] = useState<string | null>(null)
   const [activeYoutube, setActiveYoutube] = useState<string | null>(null)
   const [activeApple, setActiveApple] = useState<string | null>(null)
+  const railRef = useRef<HTMLDivElement | null>(null)
+
+  const scrollRail = (direction: 'left' | 'right') => {
+    const rail = railRef.current
+    if (!rail) return
+
+    const amount = direction === 'left' ? -360 : 360
+    rail.scrollBy({ left: amount, behavior: 'smooth' })
+  }
+
   return (
     <section id="music" className="py-24">
       <div className="container">
         <h2 className="text-3xl font-bold mb-6">Música</h2>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {tracks.map((t) => (
-            <article key={t.id} className="bg-zinc-900/60 p-4 rounded-lg flex flex-col">
+        {tracks.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/40 px-6 py-10 text-center text-zinc-400">
+            No hay temas cargados todavía. Cuando elijas otros, los agrego aquí.
+          </div>
+        ) : (
+          <div className="relative">
+            {tracks.length > 3 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => scrollRail('left')}
+                  aria-label="Deslizar música a la izquierda"
+                  className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/70 px-3 py-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollRail('right')}
+                  aria-label="Deslizar música a la derecha"
+                  className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/70 px-3 py-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90"
+                >
+                  ›
+                </button>
+              </>
+            )}
+
+            <div
+              ref={railRef}
+              className="flex gap-6 overflow-x-auto scroll-smooth pb-3 pr-12 pl-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {tracks.map((t) => (
+            <article key={t.id} className="min-w-[280px] max-w-[340px] flex-none rounded-lg bg-zinc-900/60 p-4 flex flex-col sm:min-w-[320px]">
               <div className="flex items-center gap-4">
                 <div
                   className="relative h-24 w-24 overflow-hidden rounded bg-zinc-800 bg-cover bg-center"
@@ -64,6 +118,7 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
                 <div className="min-w-0">
                   <h3 className="truncate text-lg font-semibold">{t.title}</h3>
                   {t.artist && <p className="text-sm text-zinc-400">{t.artist}</p>}
+                  <p className="text-xs uppercase tracking-wide text-zinc-500">{t.releaseType || 'Single'}</p>
                 </div>
               </div>
 
@@ -191,8 +246,10 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
                 )}
               </div>
             </article>
-          ))}
-        </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -225,8 +282,8 @@ function appleEmbedSrc(url?: string) {
 }
 
 function getCoverSrc(t: Track) {
-  if (t.cover) return t.cover
-  return '/images/hero-graffiti.png'
+  if (t.cover) return encodeURI(t.cover)
+  return encodeURI('/images/hero-graffiti.png')
 }
 
 type MusicBadgeProps = { variant: 'youtube' | 'spotify' | 'apple' }
