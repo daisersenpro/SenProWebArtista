@@ -14,22 +14,22 @@ const colors = [
 const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL']
 
 export default function Merch() {
-  const [color, setColor] = useState(null)
-  const [size, setSize] = useState(null)
-  const [modalOpen, setModalOpen] = useState(false)
-  const modalRef = useRef(null)
+  const [color, setColor] = useState<string | null>(null)
+  const [size, setSize] = useState<string | null>(null)
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const modalRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    function onKey(e) {
-      if (e?.key === 'Escape') setModalOpen(false)
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setModalOpen(false)
     }
     if (modalOpen) window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [modalOpen])
 
-  const [poleraColor, setPoleraColor] = useState(null)
-  const [poleraSize, setPoleraSize] = useState(null)
-  const [poleraModalOpen, setPoleraModalOpen] = useState(false)
+  const [poleraColor, setPoleraColor] = useState<string | null>(null)
+  const [poleraSize, setPoleraSize] = useState<string | null>(null)
+  const [poleraModalOpen, setPoleraModalOpen] = useState<boolean>(false)
   const poleraImg = '/images/merch/polera.png'
   const poleraTitle = 'Polera Dogo Premium'
   const poleraPrice = '24.990 CLP'
