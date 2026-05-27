@@ -49,11 +49,12 @@ export default function Hero() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}>
-          <p className="text-lg md:text-xl text-gray-300 mt-6">SenPro — Real estilo propio y buena música. ¡Qué pasa!</p>
+          <p className="text-lg md:text-xl text-gray-300 mt-6">SenPro — Rapero y productor de La Reina, Santiago de Chile.</p>
         </motion.div>
 
-        <div className="flex justify-center gap-4 mt-8">
-          <Link href="#music" className="px-6 py-3 bg-white text-black rounded-md font-semibold">Escuchar música</Link>
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="#videos" className="px-6 py-3 bg-white text-black rounded-md font-semibold">Ver videos</Link>
+          <Link href="#music" className="px-6 py-3 border border-white/30 text-white rounded-md font-semibold">Escuchar música</Link>
         </div>
       </div>
     </section>

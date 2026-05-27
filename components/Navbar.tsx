@@ -10,6 +10,7 @@ export default function Navbar() {
         <div />
 
         <div className="hidden md:flex items-center gap-6 text-sm">
+          <Link href="#videos" className="hover:underline">Videos</Link>
           <Link href="#music" className="hover:underline">Música</Link>
           <Link href="#bio" className="hover:underline">Historia</Link>
           <Link href="#merch" className="hover:underline">Merch</Link>
