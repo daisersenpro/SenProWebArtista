@@ -45,6 +45,11 @@ export default function VideosSection() {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const activeVideo = videos[activeIndex]
+  const canEmbedInstagram =
+    activeVideo.platform === 'instagram' &&
+    (activeVideo.embedUrl.includes('/embed') ||
+      activeVideo.embedUrl.includes('/reel') ||
+      activeVideo.embedUrl.includes('/p/'))
 
   const goToPrevious = () => {
     setActiveIndex((current) => (current - 1 + videos.length) % videos.length)
@@ -105,13 +110,36 @@ export default function VideosSection() {
               <div className="relative aspect-video bg-black overflow-hidden">
                 <div className="flex h-full w-full items-center justify-center">
                   {activeVideo.platform === 'instagram' ? (
-                    <iframe
-                      className="h-full w-full max-w-[360px]"
-                      src={activeVideo.embedUrl}
-                      title={activeVideo.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
+                    canEmbedInstagram ? (
+                      <iframe
+                        className="h-full w-full max-w-[360px]"
+                        src={activeVideo.embedUrl}
+                        title={activeVideo.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <div className="flex h-full w-full max-w-[540px] flex-col items-center justify-center gap-4 rounded-md border border-white/10 bg-black/60 p-6 text-center">
+                        <div className="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-pink-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 2C4.238 2 2 4.238 2 7v10c0 2.762 2.238 5 5 5h10c2.762 0 5-2.238 5-5V7c0-2.762-2.238-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10z"/>
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          <div className="text-left">
+                            <p className="text-white font-semibold">Ver historia en Instagram</p>
+                            <p className="text-sm text-gray-300">Invitación — Agrupación Alcanza tu Estrella (SenPro)</p>
+                          </div>
+                        </div>
+                        <a
+                          href={activeVideo.watchUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-pink-500 to-yellow-400 px-4 py-2 text-sm font-semibold text-black shadow"
+                        >
+                          Abrir en Instagram
+                        </a>
+                      </div>
+                    )
                   ) : (
                     <iframe
                       className="h-full w-full"

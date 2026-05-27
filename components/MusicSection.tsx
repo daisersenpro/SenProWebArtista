@@ -22,14 +22,6 @@ const SAMPLE_TRACKS: Track[] = [
     youtubeId: 'Rku8UbjhfbE',
   },
   {
-    id: 'en-la-ciudad',
-    title: 'En La Ciudad',
-    artist: 'SenPro',
-    releaseType: 'Single',
-    cover: '/images/portadas/4_En la ciudad.jpg',
-    youtubeId: 'yNsMXmiIHlI',
-  },
-  {
     id: 'el-tiempo-no-perdona',
     title: 'El Tiempo No Perdona',
     artist: 'SenPro',
