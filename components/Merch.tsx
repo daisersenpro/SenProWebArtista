@@ -31,7 +31,7 @@ export default function Merch() {
   const [poleraSize, setPoleraSize] = useState<string | null>(null)
   const [poleraModalOpen, setPoleraModalOpen] = useState<boolean>(false)
   const poleraImg = '/images/merch/polera.png'
-  const poleraTitle = 'Polera Dogo Premium'
+  const poleraTitle = 'Polera Premium'
   const poleraPrice = '24.990 CLP'
   const poleraSizes = ['S', 'M', 'L', 'XL', 'XXL']
 
@@ -41,7 +41,7 @@ export default function Merch() {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
   }
 
-  const productTitle = 'Polerón SENPRO'
+  const productTitle = 'Polerón SenPro'
   const price = '38.990 CLP'
   const img = '/images/merch/poleron.png'
 
@@ -57,7 +57,7 @@ export default function Merch() {
         <h2 className="text-3xl font-bold mb-6">Merch</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-          {/* Polerón SENPRO */}
+          {/* Polerón SenPro */}
           <div className="bg-gray-900 p-6 rounded-lg">
             <button
               type="button"

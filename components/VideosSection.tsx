@@ -6,6 +6,7 @@ type VideoItem = {
   title: string
   description: string
   hashtags: string
+  platform: 'youtube' | 'instagram'
   embedUrl: string
   watchUrl: string
 }
@@ -16,6 +17,7 @@ const videos: VideoItem[] = [
     description:
       'Extracto de la participación de Anyelo SenPro en el programa de concurso chileno Ahora Caigo de TVN.',
     hashtags: '#AhoraCaigo #TVN #SenPro #Chile #Concurso #Televisión',
+    platform: 'youtube',
     embedUrl: 'https://www.youtube.com/embed/DrBnSsPCZ6I',
     watchUrl: 'https://www.youtube.com/watch?v=DrBnSsPCZ6I',
   },
@@ -24,8 +26,18 @@ const videos: VideoItem[] = [
     description:
       'Un momento entretenido en The Floor Chile donde mostraron una faceta más marcial y técnica de SenPro, con combos suaves y buena vibra en pantalla.',
     hashtags: '#TheFloorChile #TVN #SenPro #Chile #ArtesMarciales #Televisión',
+    platform: 'youtube',
     embedUrl: 'https://www.youtube.com/embed/oZSNMt8MeRM',
     watchUrl: 'https://youtube.com/shorts/oZSNMt8MeRM',
+  },
+  {
+    title: 'Conmemorativo Cristian G & Flaco R | Presentación SenPro',
+    description:
+      'Aquí un breve video de mi presentación en el conmemorativo de #CristianG y #FlacoR (Q.E.P.D.), donde participé con mucho cariño y respeto. Gracias a Freeky Gee por la grabación.',
+    hashtags: '#SenPro #QuePasa!',
+    platform: 'instagram',
+    embedUrl: 'https://www.instagram.com/reel/C75NMVAgty0/embed',
+    watchUrl: 'https://www.instagram.com/reel/C75NMVAgty0/?igsh=NDVhd3M4NWFmNnYy',
   },
 ]
 
@@ -57,6 +69,19 @@ export default function VideosSection() {
         </div>
 
         <div className="relative">
+          <div
+            className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-3xl"
+            aria-hidden
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-20 blur-[1px] scale-110"
+              style={{ backgroundImage: 'url(/images/hero-graffiti.png)' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black" />
+            <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-red-500/20 to-transparent blur-2xl" />
+            <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-red-500/20 to-transparent blur-2xl" />
+          </div>
+
           <button
             type="button"
             onClick={goToPrevious}
@@ -77,14 +102,26 @@ export default function VideosSection() {
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
             <div className="bg-zinc-950/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-              <div className="relative aspect-video bg-black">
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={activeVideo.embedUrl}
-                  title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
+              <div className="relative aspect-video bg-black overflow-hidden">
+                <div className="flex h-full w-full items-center justify-center">
+                  {activeVideo.platform === 'instagram' ? (
+                    <iframe
+                      className="h-full w-full max-w-[360px]"
+                      src={activeVideo.embedUrl}
+                      title={activeVideo.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <iframe
+                      className="h-full w-full"
+                      src={activeVideo.embedUrl}
+                      title={activeVideo.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
@@ -105,7 +142,7 @@ export default function VideosSection() {
                 rel="noreferrer"
                 className="inline-flex items-center justify-center rounded-md bg-red-600 px-5 py-3 font-semibold text-white transition hover:bg-red-500"
               >
-                Ver en YouTube
+                {activeVideo.platform === 'instagram' ? 'Ver en Instagram' : 'Ver en YouTube'}
               </a>
             </div>
           </div>
