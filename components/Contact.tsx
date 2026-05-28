@@ -1,25 +1,284 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
+  const [isScratchActive, setIsScratchActive] = useState(false)
+  const [vinylRotation, setVinylRotation] = useState(0)
+  const scratchAudioRef = useRef<HTMLAudioElement | null>(null)
+  const scratchTimerRef = useRef<number | null>(null)
+  const draggingRef = useRef(false)
+  const lastPointerXRef = useRef<number | null>(null)
+  const lastScratchAtRef = useRef(0)
+
+  // Form state
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [category, setCategory] = useState('')
+  const [message, setMessage] = useState('')
+  const [errors, setErrors] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const ensureScratchAudio = () => {
+    if (typeof window === 'undefined') return null
+
+    if (!scratchAudioRef.current) {
+      const audio = new Audio('/sounds/scratch.mp3')
+      audio.preload = 'auto'
+      audio.volume = 0.9
+      scratchAudioRef.current = audio
+    }
+
+    return scratchAudioRef.current
+  }
+
+  const playScratch = async () => {
+    const audio = ensureScratchAudio()
+    if (!audio) return
+
+    try {
+      const startAt = 7
+      const endAt = 8
+
+      audio.pause()
+      audio.currentTime = startAt
+      await audio.play()
+
+      window.setTimeout(() => {
+        if (!audio.paused && audio.currentTime >= startAt) {
+          audio.pause()
+          audio.currentTime = startAt
+        }
+      }, (endAt - startAt) * 1000)
+    } catch {
+      // ignore autoplay / playback edge cases
+    }
+  }
+
+  const stopScratchLoop = () => {
+    setIsScratchActive(false)
+    draggingRef.current = false
+    lastPointerXRef.current = null
+
+    if (scratchTimerRef.current) {
+      window.clearInterval(scratchTimerRef.current)
+      scratchTimerRef.current = null
+    }
+  }
+
+  const triggerScratchFromMove = (deltaX: number) => {
+    const now = Date.now()
+    if (now - lastScratchAtRef.current < 120) return
+
+    lastScratchAtRef.current = now
+
+    const rotationDelta = deltaX * 0.7
+    setVinylRotation((value) => value + rotationDelta)
+    void playScratch()
+  }
+
+  const handleVinylPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    draggingRef.current = true
+    lastPointerXRef.current = event.clientX
+    setIsScratchActive(true)
+
+    if (scratchTimerRef.current) {
+      window.clearInterval(scratchTimerRef.current)
+      scratchTimerRef.current = null
+    }
+
+    void playScratch()
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handleVinylPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggingRef.current) return
+
+    const previousX = lastPointerXRef.current
+    if (previousX === null) {
+      lastPointerXRef.current = event.clientX
+      return
+    }
+
+    const deltaX = event.clientX - previousX
+    if (Math.abs(deltaX) < 2) return
+
+    lastPointerXRef.current = event.clientX
+    triggerScratchFromMove(deltaX)
+  }
+
+  const handleVinylPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    stopScratchLoop()
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    } catch {
+      // ignore pointer capture release errors
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (scratchTimerRef.current) {
+        window.clearInterval(scratchTimerRef.current)
+      }
+
+      scratchAudioRef.current?.pause()
+    }
+  }, [])
+
   return (
     <section id="contact" className="py-24">
       <div className="container">
-        <h2 className="text-3xl font-bold mb-4">Contacto</h2>
-        <p className="text-gray-400 mb-6">Escríbenos para booking, prensa o compras de merch.</p>
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Contacto</h2>
+            <p className="text-gray-400 mb-6">Escríbenos para booking, prensa o compras de merch.</p>
 
-        {!sent ? (
-          <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="max-w-xl">
-            <input className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu nombre" required />
-            <input type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu email" required />
-            <textarea className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Mensaje" rows={5} required />
-            <button className="px-4 py-2 bg-white text-black rounded">Enviar</button>
-          </form>
-        ) : (
-          <div className="text-green-400">Gracias — te responderemos pronto.</div>
-        )}
+            {!sent ? (
+              <form onSubmit={async (e) => {
+                e.preventDefault()
+                setErrors(null)
+
+                // basic client-side validation
+                if (!name.trim() || !email.trim() || !phone.trim() || !message.trim()) {
+                  setErrors('Completa todos los campos requeridos.')
+                  return
+                }
+
+                const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
+                if (!emailRe.test(email)) {
+                  setErrors('Ingresa un email válido.')
+                  return
+                }
+
+                if (message.trim().length < 10) {
+                  setErrors('El mensaje debe tener al menos 10 caracteres.')
+                  return
+                }
+
+                if (!category) {
+                  setErrors('Selecciona un motivo de contacto.')
+                  return
+                }
+
+                setLoading(true)
+
+                try {
+                  const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, category, message })
+                  })
+
+                  if (res.ok) {
+                    setSent(true)
+                    setName('')
+                    setEmail('')
+                    setPhone('')
+                    setMessage('')
+                  } else {
+                    const data = await res.json().catch(() => ({}))
+                    setErrors(data?.error || 'Error al enviar. Intenta de nuevo más tarde.')
+                  }
+                } catch (err) {
+                  setErrors('Error de red. Revisa tu conexión.')
+                } finally {
+                  setLoading(false)
+                }
+              }} className="max-w-xl">
+                {errors && <div className="mb-3 text-red-400">{errors}</div>}
+
+                <input value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu nombre" required />
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu email" required />
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu teléfono" required />
+
+                <label className="sr-only">Motivo</label>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded">
+                  <option value="">--Ninguno--</option>
+                  <option value="Contratación">Contratación</option>
+                  <option value="Colaboraciones">Colaboraciones</option>
+                  <option value="Eventos">Eventos</option>
+                  <option value="Prensa">Prensa</option>
+                  <option value="Merch">Merch</option>
+                </select>
+
+                <textarea value={message} onChange={(e) => setMessage(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Mensaje" rows={5} required />
+
+                <button disabled={loading} className="px-4 py-2 bg-white text-black rounded">{loading ? 'Enviando…' : 'Enviar'}</button>
+              </form>
+            ) : (
+              <div className="text-green-400">Gracias — te responderemos pronto.</div>
+            )}
+          </div>
+
+          <div
+            className="group relative mx-auto w-full max-w-[420px] cursor-pointer select-none"
+            onPointerLeave={stopScratchLoop}
+            onFocus={() => setIsScratchActive(true)}
+            onBlur={stopScratchLoop}
+            tabIndex={0}
+            role="img"
+            aria-label="Tornamesa con vinilo animado"
+          >
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_45%)]" />
+
+              <div className="relative flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-gray-500">Turntable</p>
+                  <h3 className="mt-1 text-xl font-semibold text-white">Scratch Session</h3>
+                </div>
+                <div className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs text-red-200">
+                  {isScratchActive ? 'Sonando' : 'Listo'}
+                </div>
+              </div>
+
+              <div className="mt-8 flex items-center justify-center">
+                <div
+                  className="relative h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#090909_55%,#000_100%)] shadow-[inset_0_0_0_12px_rgba(255,255,255,0.04),0_0_50px_rgba(0,0,0,0.45)]"
+                  style={{ transform: `rotate(${vinylRotation}deg)` }}
+                  onPointerDown={handleVinylPointerDown}
+                  onPointerMove={handleVinylPointerMove}
+                  onPointerUp={handleVinylPointerUp}
+                  onPointerCancel={handleVinylPointerUp}
+                  onLostPointerCapture={handleVinylPointerUp}
+                >
+                  <div className="vinyl-spin pointer-events-none absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#1f1f1f_0deg,#111_40deg,#272727_80deg,#090909_140deg,#1b1b1b_200deg,#111_260deg,#2a2a2a_320deg,#111_360deg)] shadow-inner" />
+                  <div className="pointer-events-none absolute inset-[22px] rounded-full border border-white/5" />
+                  <div className="pointer-events-none absolute inset-[70px] rounded-full border border-white/10" />
+                  <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-red-400 via-red-500 to-red-700 shadow-[0_0_0_10px_rgba(255,255,255,0.04)]" />
+                  <div className="pointer-events-none absolute left-1/2 top-[10px] h-[170px] w-[18px] -translate-x-1/2 rotate-[32deg] origin-top rounded-full bg-gradient-to-b from-zinc-200 via-zinc-400 to-zinc-700 shadow-lg" />
+                  <div className="pointer-events-none absolute left-[58%] top-[62px] h-7 w-7 rounded-full border border-white/20 bg-black shadow-[0_0_18px_rgba(255,255,255,0.12)]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <style jsx>{`
+        .vinyl-spin {
+          animation: vinyl-rotate 6s linear infinite;
+          touch-action: none;
+          cursor: grab;
+          will-change: transform;
+        }
+
+        .vinyl-spin:active {
+          cursor: grabbing;
+          animation-duration: 1.1s;
+        }
+
+        @keyframes vinyl-rotate {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </section>
   )
 }

@@ -78,7 +78,7 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
                   type="button"
                   onClick={() => scrollRail('left')}
                   aria-label="Deslizar música a la izquierda"
-                  className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/70 px-3 py-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90"
+                  className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/70 px-3 py-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white"
                 >
                   ‹
                 </button>
@@ -86,7 +86,7 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
                   type="button"
                   onClick={() => scrollRail('right')}
                   aria-label="Deslizar música a la derecha"
-                  className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/10 bg-black/70 px-3 py-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90"
+                  className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/70 px-3 py-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white"
                 >
                   ›
                 </button>

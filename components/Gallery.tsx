@@ -91,7 +91,7 @@ export default function Gallery() {
                 type="button"
                 onClick={() => scrollRail('left')}
                 aria-label="Ver fotos anteriores"
-                className="absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-black/75 p-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90 md:flex"
+                className="absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/75 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white md:flex"
               >
                 ‹
               </button>
@@ -99,7 +99,7 @@ export default function Gallery() {
                 type="button"
                 onClick={() => scrollRail('right')}
                 aria-label="Ver fotos siguientes"
-                className="absolute right-0 top-1/2 z-10 hidden translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-black/75 p-3 text-white shadow-lg backdrop-blur-md transition hover:bg-black/90 md:flex"
+                className="absolute right-0 top-1/2 z-10 hidden translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/75 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white md:flex"
               >
                 ›
               </button>

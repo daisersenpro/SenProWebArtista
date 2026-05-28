@@ -99,7 +99,7 @@ export default function VideosSection() {
             type="button"
             onClick={goToPrevious}
             aria-label="Video anterior"
-            className="absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/80 p-3 text-white shadow-lg transition hover:bg-black md:flex"
+            className="absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/80 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] transition hover:border-amber-300/60 hover:bg-black md:flex"
           >
             <span className="text-xl leading-none">‹</span>
           </button>
@@ -108,7 +108,7 @@ export default function VideosSection() {
             type="button"
             onClick={goToNext}
             aria-label="Video siguiente"
-            className="absolute right-0 top-1/2 z-10 hidden translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-black/80 p-3 text-white shadow-lg transition hover:bg-black md:flex"
+            className="absolute right-0 top-1/2 z-10 hidden translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/35 bg-black/80 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] transition hover:border-amber-300/60 hover:bg-black md:flex"
           >
             <span className="text-xl leading-none">›</span>
           </button>
