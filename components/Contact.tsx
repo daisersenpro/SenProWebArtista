@@ -117,6 +117,11 @@ export default function Contact() {
     }
   }
 
+  const handlePhoneChange = (value: string) => {
+    // Keep only phone-friendly characters so letters never make it into state.
+    setPhone(value.replace(/[^0-9+\s-]/g, ''))
+  }
+
   useEffect(() => {
     return () => {
       if (scratchTimerRef.current) {
@@ -210,7 +215,7 @@ export default function Contact() {
                 <input id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="ejemplo@correo.com" required />
 
                 <label htmlFor="phone" className="block text-sm text-gray-300 mb-1">Teléfono</label>
-                <input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="+56 9 1234 5678" required />
+                <input id="phone" type="tel" inputMode="numeric" autoComplete="tel" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="+56 9 1234 5678" required />
 
                 <label htmlFor="category" className="block text-sm text-gray-300 mb-1">Motivo</label>
                 <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded">
