@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function Contact() {
+  const whatsappNumber = '56949728928'
   const [sent, setSent] = useState(false)
   const [isScratchActive, setIsScratchActive] = useState(false)
   const [vinylRotation, setVinylRotation] = useState(0)
@@ -184,24 +185,25 @@ export default function Contact() {
                 setLoading(true)
 
                 try {
-                  const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone: norm, category, message })
-                  })
+                  const body = [
+                    'Hola, quiero hacer una consulta:',
+                    `Nombre: ${name.trim()}`,
+                    `Email: ${email.trim()}`,
+                    `Teléfono: ${norm}`,
+                    `Motivo: ${category}`,
+                    `Mensaje: ${message.trim()}`,
+                  ].join('\n')
 
-                  if (res.ok) {
-                    setSent(true)
-                    setName('')
-                    setEmail('')
-                    setPhone('')
-                    setMessage('')
-                  } else {
-                    const data = await res.json().catch(() => ({}))
-                    setErrors(data?.error || 'Error al enviar. Intenta de nuevo más tarde.')
-                  }
+                  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(body)}`
+                  window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+
+                  setSent(true)
+                  setName('')
+                  setEmail('')
+                  setPhone('')
+                  setMessage('')
                 } catch (err) {
-                  setErrors('Error de red. Revisa tu conexión.')
+                  setErrors('No se pudo abrir WhatsApp. Revisa que el navegador no bloquee ventanas emergentes.')
                 } finally {
                   setLoading(false)
                 }
@@ -230,10 +232,10 @@ export default function Contact() {
                 <label htmlFor="message" className="block text-sm text-gray-300 mb-1">Mensaje</label>
                 <textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Ej: Hola, quiero consultar sobre booking para el 12/06..." rows={5} required />
 
-                <button disabled={loading} className="px-4 py-2 bg-white text-black rounded">{loading ? 'Enviando…' : 'Enviar'}</button>
+                <button disabled={loading} className="px-4 py-2 bg-white text-black rounded">{loading ? 'Abriendo WhatsApp…' : 'Enviar por WhatsApp'}</button>
               </form>
             ) : (
-              <div className="text-green-400">Gracias — te responderemos pronto.</div>
+              <div className="text-green-400">Se abrió WhatsApp con tu mensaje listo para enviar.</div>
             )}
           </div>
 
