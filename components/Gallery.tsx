@@ -15,6 +15,7 @@ const GALLERY_CAPTIONS: Record<string, string> = {
   'SenPro Rah Digga.png': 'SenPro & Rah Digga',
   'SenPro Rampage.png': 'SenPro & Rampage',
   'SenPro Stk.png': 'SenPro & Prodigal',
+  'SenPro & OSC.png': 'SenPro & OSC',
 }
 
 export default function Gallery() {
