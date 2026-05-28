@@ -7,6 +7,16 @@ type GalleryImage = {
   caption: string
 }
 
+const GALLERY_CAPTIONS: Record<string, string> = {
+  'SenPro 21-hrs.png': 'SenPro & 21 Hrs Crew',
+  'SenPro ATE.png': 'SenPro & Alcanza Tu Estrella',
+  'SenPro Bside.png': 'SenPro | Coleone | Kogollete',
+  'SenPro con qn.png': 'SenPro & QN Estilo',
+  'SenPro Rah Digga.png': 'SenPro & Rah Digga',
+  'SenPro Rampage.png': 'SenPro & Rampage',
+  'SenPro Stk.png': 'SenPro & Prodigal',
+}
+
 export default function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([])
   const [activeImage, setActiveImage] = useState<string | null>(null)
@@ -37,7 +47,7 @@ export default function Gallery() {
       }
 
       rail.scrollBy({ left: rail.clientWidth, behavior: 'smooth' })
-    }, 3000)
+    }, 6800)
 
     return () => window.clearInterval(timer)
   }, [images.length])
@@ -48,7 +58,13 @@ export default function Gallery() {
     try {
       const parts = src.split('/')
       const file = decodeURIComponent(parts[parts.length - 1])
-      return file.replace(/[-_\.\d]+/g, ' ').replace(/\.(jpe?g|png|webp|gif|avif|mp4)$/i, '').trim()
+
+      const customCaption = GALLERY_CAPTIONS[file]
+      if (customCaption) {
+        return customCaption
+      }
+
+      return file.replace(/\.(jpe?g|png|webp|gif|avif|mp4)$/i, '').replace(/[-_\.\d]+/g, ' ').trim()
     } catch {
       return ''
     }
@@ -91,7 +107,7 @@ export default function Gallery() {
 
           <div
             ref={railRef}
-            className="flex gap-3 overflow-x-auto scroll-smooth pb-2 pr-10 pl-10 [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
+            className="flex gap-2 overflow-x-auto scroll-smooth pb-2 pr-10 pl-10 [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
           >
             {visibleImages.map((image) => (
               <article
