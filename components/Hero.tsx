@@ -30,7 +30,12 @@ export default function Hero() {
       </div>
 
       <div className="container relative z-10 text-center">
-        <motion.div ref={logoRef} initial={{ opacity: 0, y: -10, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 1 }}>
+        <motion.div
+          ref={logoRef}
+          initial={{ opacity: 0, y: -10, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1, x: [0, 4, 0] }}
+          transition={{ duration: 1, x: { duration: 7, repeat: Infinity, ease: 'easeInOut' } }}
+        >
           <div className="relative mx-auto w-[280px] md:w-[420px]">
             {/* Circular animated ring */}
             <div className="absolute -inset-4 md:-inset-6 rounded-full border-2 border-white/20" 
@@ -57,6 +62,7 @@ export default function Hero() {
           <Link href="#music" className="px-6 py-3 border border-white/30 text-white rounded-md font-semibold">Escuchar música</Link>
         </div>
       </div>
+
     </section>
   )
 }

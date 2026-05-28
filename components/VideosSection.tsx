@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type VideoItem = {
   title: string
@@ -43,6 +43,14 @@ const videos: VideoItem[] = [
 
 export default function VideosSection() {
   const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % videos.length)
+    }, 7000)
+
+    return () => window.clearInterval(timer)
+  }, [])
 
   const activeVideo = videos[activeIndex]
   const canEmbedInstagram =
