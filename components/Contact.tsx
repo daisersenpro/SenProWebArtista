@@ -191,7 +191,8 @@ export default function Contact() {
 
                 <input value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu nombre" required />
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu email" required />
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu teléfono" required />
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-1 bg-gray-900 rounded" placeholder="+56 9 1234 5678" required />
+                <div className="text-xs text-gray-500 mb-3">Ejemplo: +56 9 1234 5678 — E.164: +56912345678</div>
 
                 <label className="sr-only">Motivo</label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded">
