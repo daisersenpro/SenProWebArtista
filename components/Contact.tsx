@@ -152,6 +152,20 @@ export default function Contact() {
                   return
                 }
 
+                // Normalizar y validar teléfono Chile
+                const rawPhone = phone.trim()
+                const cleaned = rawPhone.replace(/[\s-]/g, '')
+                let norm = cleaned
+                if (norm.startsWith('09')) norm = '+56' + norm.slice(1)
+                else if (norm.startsWith('9')) norm = '+56' + norm
+                else if (norm.startsWith('56')) norm = '+' + norm
+
+                const phoneRe = /^\+569\d{8}$/
+                if (!phoneRe.test(norm)) {
+                  setErrors('Número inválido. Ejemplo válido: +56 9 1234 5678')
+                  return
+                }
+
                 if (message.trim().length < 10) {
                   setErrors('El mensaje debe tener al menos 10 caracteres.')
                   return
@@ -168,7 +182,7 @@ export default function Contact() {
                   const res = await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone, category, message })
+                    body: JSON.stringify({ name, email, phone: norm, category, message })
                   })
 
                   if (res.ok) {
@@ -189,13 +203,17 @@ export default function Contact() {
               }} className="max-w-xl">
                 {errors && <div className="mb-3 text-red-400">{errors}</div>}
 
-                <input value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu nombre" required />
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Tu email" required />
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-1 bg-gray-900 rounded" placeholder="+56 9 1234 5678" required />
-                <div className="text-xs text-gray-500 mb-3">Ejemplo: +56 9 1234 5678 — E.164: +56912345678</div>
+                <label htmlFor="name" className="block text-sm text-gray-300 mb-1">Nombre</label>
+                <input id="name" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Ej: Juan Pérez" required />
 
-                <label className="sr-only">Motivo</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded">
+                <label htmlFor="email" className="block text-sm text-gray-300 mb-1">Email</label>
+                <input id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="ejemplo@correo.com" required />
+
+                <label htmlFor="phone" className="block text-sm text-gray-300 mb-1">Teléfono</label>
+                <input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="+56 9 1234 5678" required />
+
+                <label htmlFor="category" className="block text-sm text-gray-300 mb-1">Motivo</label>
+                <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded">
                   <option value="">--Ninguno--</option>
                   <option value="Contratación">Contratación</option>
                   <option value="Colaboraciones">Colaboraciones</option>
@@ -204,7 +222,8 @@ export default function Contact() {
                   <option value="Merch">Merch</option>
                 </select>
 
-                <textarea value={message} onChange={(e) => setMessage(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Mensaje" rows={5} required />
+                <label htmlFor="message" className="block text-sm text-gray-300 mb-1">Mensaje</label>
+                <textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full p-3 mb-3 bg-gray-900 rounded" placeholder="Ej: Hola, quiero consultar sobre booking para el 12/06..." rows={5} required />
 
                 <button disabled={loading} className="px-4 py-2 bg-white text-black rounded">{loading ? 'Enviando…' : 'Enviar'}</button>
               </form>
