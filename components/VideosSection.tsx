@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type VideoItem = {
   title: string
@@ -44,6 +44,8 @@ const videos: VideoItem[] = [
 export default function VideosSection() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [modalIndex, setModalIndex] = useState<number | null>(null)
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     if (isPaused) return
@@ -54,6 +56,24 @@ export default function VideosSection() {
 
     return () => window.clearInterval(timer)
   }, [isPaused])
+
+  // Close modal on Escape and focus close button when modal opens
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape' && modalIndex !== null) {
+        setModalIndex(null)
+        setIsPaused(false)
+      }
+    }
+
+    if (modalIndex !== null) {
+      document.addEventListener('keydown', onKey)
+      // focus close button
+      setTimeout(() => closeBtnRef.current?.focus(), 10)
+    }
+
+    return () => document.removeEventListener('keydown', onKey)
+  }, [modalIndex])
 
   const activeVideo = videos[activeIndex]
   const canEmbedInstagram =
@@ -129,13 +149,27 @@ export default function VideosSection() {
                 <div className="flex h-full w-full items-center justify-center">
                   {activeVideo.platform === 'instagram' ? (
                     canEmbedInstagram ? (
-                      <iframe
-                        className="h-full w-full max-w-[360px]"
-                        src={activeVideo.embedUrl}
-                        title={activeVideo.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                      />
+                      <div className="relative h-full w-full max-w-[360px]">
+                        <iframe
+                          className="h-full w-full"
+                          src={activeVideo.embedUrl}
+                          title={activeVideo.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setModalIndex(activeIndex)
+                            setIsPaused(true)
+                          }}
+                          aria-label="Abrir video de Instagram en pantalla completa"
+                          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-4 text-white shadow-lg"
+                        >
+                          ▶
+                        </button>
+                      </div>
                     ) : (
                       <div className="flex h-full w-full max-w-[540px] flex-col items-center justify-center gap-4 rounded-md border border-white/10 bg-black/60 p-6 text-center">
                         <div className="flex items-center gap-3">
@@ -159,13 +193,27 @@ export default function VideosSection() {
                       </div>
                     )
                   ) : (
-                    <iframe
-                      className="h-full w-full"
-                      src={activeVideo.embedUrl}
-                      title={activeVideo.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
+                    <div className="relative h-full w-full">
+                      <iframe
+                        className="h-full w-full"
+                        src={activeVideo.embedUrl}
+                        title={activeVideo.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalIndex(activeIndex)
+                          setIsPaused(true)
+                        }}
+                        aria-label="Abrir video en pantalla completa"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-4 text-white shadow-lg"
+                      >
+                        ▶
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -204,6 +252,68 @@ export default function VideosSection() {
               />
             ))}
           </div>
+          {modalIndex !== null && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+              onClick={() => {
+                setModalIndex(null)
+                setIsPaused(false)
+              }}
+              onPointerDown={() => {
+                setModalIndex(null)
+                setIsPaused(false)
+              }}
+            >
+              {/* Fixed, highly-visible close button in overlay so it never scrolls out of view */}
+              <button
+                ref={closeBtnRef}
+                aria-label="Cerrar video"
+                onClick={() => {
+                  setModalIndex(null)
+                  setIsPaused(false)
+                }}
+                className="absolute right-4 top-4 z-60 inline-flex items-center justify-center rounded-full bg-black/80 text-white px-3 py-2 text-sm font-semibold shadow-lg backdrop-blur-sm"
+              >
+                Cerrar
+              </button>
+              <div
+                className="relative w-full max-w-4xl"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-label={videos[modalIndex].title}
+              >
+
+                {/* Instagram: show a comfortable vertical rectangle; YouTube: larger 16:9 */}
+                {videos[modalIndex].platform === 'instagram' ? (
+                  <div className="mx-auto rounded-md bg-zinc-900 p-3" style={{ width: 'min(92vw,420px)' }}>
+                    <div style={{ aspectRatio: '9/16', width: '100%' }}>
+                      <iframe
+                        className="h-full w-full rounded"
+                        src={videos[modalIndex].embedUrl}
+                        title={videos[modalIndex].title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mx-auto rounded-md bg-zinc-900 p-3" style={{ width: 'min(92vw,1000px)' }}>
+                    <div style={{ aspectRatio: '16/9', width: '100%' }}>
+                      <iframe
+                        className="h-full w-full rounded"
+                        src={`${videos[modalIndex].embedUrl}?rel=0&autoplay=1`}
+                        title={videos[modalIndex].title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
