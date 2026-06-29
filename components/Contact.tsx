@@ -6,6 +6,7 @@ export default function Contact() {
   const [sent, setSent] = useState(false)
   const [isScratchActive, setIsScratchActive] = useState(false)
   const [vinylRotation, setVinylRotation] = useState(0)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const scratchAudioRef = useRef<HTMLAudioElement | null>(null)
   const scratchTimerRef = useRef<number | null>(null)
   const draggingRef = useRef(false)
@@ -94,6 +95,19 @@ export default function Contact() {
   }
 
   const handleVinylPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    // set subtle tilt based on pointer position over the vinyl
+    try {
+      const rect = (event.currentTarget as HTMLDivElement).getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      const relX = (event.clientX - cx) / (rect.width / 2)
+      const relY = (event.clientY - cy) / (rect.height / 2)
+      const maxTilt = 8 // degrees
+      setTilt({ x: -relY * maxTilt, y: relX * maxTilt })
+    } catch {
+      // ignore
+    }
+
     if (!draggingRef.current) return
 
     const previousX = lastPointerXRef.current
@@ -116,6 +130,10 @@ export default function Contact() {
     } catch {
       // ignore pointer capture release errors
     }
+  }
+
+  const handleVinylPointerLeave = () => {
+    setTilt({ x: 0, y: 0 })
   }
 
   const handlePhoneChange = (value: string) => {
@@ -248,34 +266,45 @@ export default function Contact() {
             role="img"
             aria-label="Tornamesa con vinilo animado"
           >
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_45%)]" />
+            <div className="relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-[radial-gradient(ellipse_at_top_left,#050505_0%,#070707_30%,#030303_100%)] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
+              <div className="absolute inset-0 pointer-events-none grain" />
 
               <div className="relative flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-gray-500">Turntable</p>
-                  <h3 className="mt-1 text-xl font-semibold text-white">Scratch Session</h3>
+                  <h3 className="mt-1 text-xl font-extrabold text-amber-50 tracking-tight">Scratch Session</h3>
+                  <img src="/images/logo.png" alt="SenPro" className="mt-3 h-12 sm:h-14 w-auto" />
                 </div>
-                <div className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs text-red-200">
-                  {isScratchActive ? 'Sonando' : 'Listo'}
+                <div className="rounded-full border border-amber-400/30 bg-amber-600/10 px-3 py-1 text-xs text-amber-200">
+                  {isScratchActive ? 'SONANDO' : 'LISTO'}
                 </div>
               </div>
 
+              {/* logo moved below title */}
+
               <div className="mt-8 flex items-center justify-center">
                 <div
-                  className="relative h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#090909_55%,#000_100%)] shadow-[inset_0_0_0_12px_rgba(255,255,255,0.04),0_0_50px_rgba(0,0,0,0.45)]"
-                  style={{ transform: `rotate(${vinylRotation}deg)` }}
+                  className="relative h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle_at_center,#0b0b0b_0%,#060606_55%,#000_100%)] shadow-[inset_0_0_0_12px_rgba(255,255,255,0.02),0_0_60px_rgba(0,0,0,0.7)] will-change-transform"
+                  style={{
+                    transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                  }}
                   onPointerDown={handleVinylPointerDown}
                   onPointerMove={handleVinylPointerMove}
                   onPointerUp={handleVinylPointerUp}
                   onPointerCancel={handleVinylPointerUp}
                   onLostPointerCapture={handleVinylPointerUp}
+                  onPointerLeave={handleVinylPointerLeave}
                 >
-                  <div className="vinyl-spin pointer-events-none absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#1f1f1f_0deg,#111_40deg,#272727_80deg,#090909_140deg,#1b1b1b_200deg,#111_260deg,#2a2a2a_320deg,#111_360deg)] shadow-inner" />
+                  <div
+                    className="vinyl-spin pointer-events-none absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#1f1f1f_0deg,#111_40deg,#272727_80deg,#090909_140deg,#1b1b1b_200deg,#111_260deg,#2a2a2a_320deg,#111_360deg)] shadow-inner ring-1 ring-amber-800/20"
+                    style={{ transform: `rotate(${vinylRotation}deg)` }}
+                  />
                   <div className="pointer-events-none absolute inset-[22px] rounded-full border border-white/5" />
                   <div className="pointer-events-none absolute inset-[70px] rounded-full border border-white/10" />
-                  <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-red-400 via-red-500 to-red-700 shadow-[0_0_0_10px_rgba(255,255,255,0.04)]" />
-                  <div className="pointer-events-none absolute left-1/2 top-[10px] h-[170px] w-[18px] -translate-x-1/2 rotate-[32deg] origin-top rounded-full bg-gradient-to-b from-zinc-200 via-zinc-400 to-zinc-700 shadow-lg" />
+                  <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 shadow-[0_0_0_10px_rgba(255,255,255,0.03)]" />
+                  <div
+                    className="pointer-events-none absolute left-1/2 top-[10px] h-[170px] w-[18px] -translate-x-1/2 origin-top rounded-full bg-gradient-to-b from-zinc-200 via-zinc-400 to-zinc-700 shadow-lg"
+                    style={{ transform: `rotate(${isScratchActive ? 18 : 32}deg)` }}
+                  />
                   <div className="pointer-events-none absolute left-[58%] top-[62px] h-7 w-7 rounded-full border border-white/20 bg-black shadow-[0_0_18px_rgba(255,255,255,0.12)]" />
                 </div>
               </div>
@@ -304,6 +333,21 @@ export default function Contact() {
           to {
             transform: rotate(360deg);
           }
+        }
+
+        .grain {
+          background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+          background-size: 3px 3px, 6px 6px;
+          mix-blend-mode: overlay;
+          opacity: 0.6;
+        }
+
+        .sticker {
+          display: inline-block;
+          filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+          opacity: 0.95;
+          border-radius: 6px;
+          background: transparent;
         }
       `}</style>
     </section>

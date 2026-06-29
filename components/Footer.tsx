@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
             <p>&copy; {currentYear} SenPro. Todos los derechos reservados.</p>
-            <p className="mt-4 md:mt-0">Hecho con pasión desde La Reina, Santiago.</p>
+            <p className="mt-4 md:mt-0">Desarrollada por <a href="https://portafolio-anyelo-bustos-fullstack.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-amber-300 hover:underline">Anyelo Bustos</a>.</p>
           </div>
         </div>
       </div>

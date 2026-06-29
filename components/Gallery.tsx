@@ -27,6 +27,7 @@ export default function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([])
   const [activeImage, setActiveImage] = useState<string | null>(null)
   const railRef = useRef<HTMLDivElement | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     fetch('/api/gallery')
@@ -75,6 +76,41 @@ export default function Gallery() {
       return ''
     }
   }
+
+  function getCurrentIndex() {
+    if (!activeImage) return -1
+    return images.findIndex((i) => i.src === activeImage)
+  }
+
+  function showPrev() {
+    const idx = getCurrentIndex()
+    if (idx === -1) return
+    const prev = (idx - 1 + images.length) % images.length
+    setActiveImage(images[prev].src)
+  }
+
+  function showNext() {
+    const idx = getCurrentIndex()
+    if (idx === -1) return
+    const next = (idx + 1) % images.length
+    setActiveImage(images[next].src)
+  }
+
+  useEffect(() => {
+    if (!activeImage) return
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveImage(null)
+      if (e.key === 'ArrowLeft') showPrev()
+      if (e.key === 'ArrowRight') showNext()
+    }
+
+    window.addEventListener('keydown', onKey)
+    // focus close button for accessibility
+    closeButtonRef.current?.focus()
+
+    return () => window.removeEventListener('keydown', onKey)
+  }, [activeImage, images])
 
   const scrollRail = (direction: 'left' | 'right') => {
     const rail = railRef.current
@@ -143,19 +179,43 @@ export default function Gallery() {
         </div>
 
         {activeImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-            <div className="max-w-[90%] max-h-[90%]">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+            onClick={() => setActiveImage(null)}
+          >
+            <div className="relative max-w-[90%] max-h-[90%]" onClick={(e) => e.stopPropagation()}>
               <button
+                ref={closeButtonRef}
                 className="mb-3 inline-block rounded bg-white/5 px-3 py-1 text-sm"
                 onClick={() => setActiveImage(null)}
               >
                 Cerrar
               </button>
+
+              <button
+                type="button"
+                onClick={showPrev}
+                aria-label="Foto anterior"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-20 hidden -translate-x-1/2 rounded-full border border-amber-400/35 bg-black/75 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white md:flex"
+              >
+                ‹
+              </button>
+
               <img
                 src={activeImage}
                 alt={captionFromPath(activeImage)}
                 className="w-full max-h-[80vh] object-contain"
               />
+
+              <button
+                type="button"
+                onClick={showNext}
+                aria-label="Foto siguiente"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-20 hidden translate-x-1/2 rounded-full border border-amber-400/35 bg-black/75 p-3 text-amber-100 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/90 hover:text-white md:flex"
+              >
+                ›
+              </button>
+
               <p className="mt-2 text-center text-gray-300">{captionFromPath(activeImage)}</p>
             </div>
           </div>
