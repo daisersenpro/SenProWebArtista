@@ -45,6 +45,22 @@ const SAMPLE_TRACKS: Track[] = [
     cover: '/images/portadas/2_No me daba cuenta.jpg',
     youtubeId: 'sJJ-MPN2ANg',
   },
+  {
+    id: 'mamacita',
+    title: 'Mamacita (ft. Kogollete)',
+    artist: 'SenPro ft. Kogollete',
+    releaseType: 'Single',
+    // YouTube: https://www.youtube.com/watch?v=-mvLkOl2OI8
+    youtubeId: '-mvLkOl2OI8',
+  },
+  {
+    id: 'en-la-ciudad',
+    title: 'En La Ciudad',
+    artist: 'SenPro',
+    releaseType: 'Single',
+    // YouTube: https://www.youtube.com/watch?v=WxMnVVhZXz8
+    youtubeId: 'WxMnVVhZXz8',
+  },
 ]
 
 export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Track[] }) {
@@ -100,11 +116,23 @@ export default function MusicSection({ tracks = SAMPLE_TRACKS }: { tracks?: Trac
               {tracks.map((t) => (
             <article key={t.id} className="min-w-[280px] max-w-[340px] flex-none rounded-lg bg-zinc-900/60 p-4 flex flex-col sm:min-w-[320px]">
               <div className="flex items-center gap-4">
-                <div
-                  className="relative h-24 w-24 overflow-hidden rounded bg-zinc-800 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${getCoverSrc(t)})` }}
-                  aria-label={t.title}
-                >
+                <div className="relative h-24 w-24 overflow-hidden rounded bg-zinc-800">
+                  <img
+                    src={t.cover ? encodeURI(t.cover) : t.youtubeId ? encodeURI(`https://img.youtube.com/vi/${t.youtubeId}/maxresdefault.jpg`) : encodeURI('/images/hero-graffiti.png')}
+                    alt={t.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      const el = e.currentTarget as HTMLImageElement
+                      if (t.youtubeId) {
+                        const hq = encodeURI(`https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`)
+                        if (el.src !== hq) el.src = hq
+                      } else {
+                        const fallback = encodeURI('/images/hero-graffiti.png')
+                        if (el.src !== fallback) el.src = fallback
+                      }
+                    }}
+                  />
                   <div className="absolute inset-0 bg-black/35" />
                 </div>
                 <div className="min-w-0">
@@ -275,6 +303,7 @@ function appleEmbedSrc(url?: string) {
 
 function getCoverSrc(t: Track) {
   if (t.cover) return encodeURI(t.cover)
+  if (t.youtubeId) return encodeURI(`https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`)
   return encodeURI('/images/hero-graffiti.png')
 }
 

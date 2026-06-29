@@ -43,14 +43,17 @@ const videos: VideoItem[] = [
 
 export default function VideosSection() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
+    if (isPaused) return
+
     const timer = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % videos.length)
     }, 7000)
 
     return () => window.clearInterval(timer)
-  }, [])
+  }, [isPaused])
 
   const activeVideo = videos[activeIndex]
   const canEmbedInstagram =
@@ -115,7 +118,14 @@ export default function VideosSection() {
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
             <div className="bg-zinc-950/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-              <div className="relative aspect-video bg-black overflow-hidden">
+              <div
+                className="relative aspect-video bg-black overflow-hidden"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                onFocus={() => setIsPaused(true)}
+                onBlur={() => setIsPaused(false)}
+                onTouchStart={() => setIsPaused(true)}
+              >
                 <div className="flex h-full w-full items-center justify-center">
                   {activeVideo.platform === 'instagram' ? (
                     canEmbedInstagram ? (
