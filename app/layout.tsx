@@ -4,8 +4,8 @@ import { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'SenPro',
-  description: 'SenPro - Rap, barrio, identidad',
+  title: 'SenPro | Rap Chileno - Hip Hop Independiente',
+  description: 'SenPro - Rap chileno, barrio e identidad. Escucha música, lanzamientos y videos de Hip Hop underground directo desde Santiago, Chile.',
   icons: {
     icon: '/images/logo.png',
     shortcut: '/images/logo.png',
