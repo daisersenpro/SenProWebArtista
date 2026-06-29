@@ -16,7 +16,11 @@ const GALLERY_CAPTIONS: Record<string, string> = {
   'SenPro Rampage.png': 'SenPro & Rampage',
   'SenPro Stk.png': 'SenPro & Prodigal',
   'SenPro & OSC.png': 'SenPro & OSC',
-  
+  'SenPro-Evento Parque Intercomunal.png': 'SenPro — Parque Intercomunal',
+  'SenPro-Corleone-Mr Cleri.png': 'SenPro | Corleone | Mr Cleri',
+  'SenPro-Que Pasa!.png': 'SenPro — Que Pasa!',
+  'SenPro En The Floor Chile.png': 'SenPro — The Floor Chile',
+  'SenPro-The Floor Chile.png': 'SenPro — The Floor Chile',
 }
 
 export default function Gallery() {
