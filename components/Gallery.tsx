@@ -10,7 +10,7 @@ type GalleryImage = {
 const GALLERY_CAPTIONS: Record<string, string> = {
   'SenPro 21-hrs.png': 'SenPro & 21 Hrs Crew',
   'SenPro ATE.png': 'SenPro & Alcanza Tu Estrella',
-  'SenPro Bside.png': 'SenPro | Coleone | Kogollete',
+  'SenPro Bside.png': 'SenPro | Corleone | Kogollete',
   'SenPro con qn.png': 'SenPro & QN Estilo',
   'SenPro Rah Digga.png': 'SenPro & Rah Digga',
   'SenPro Rampage.png': 'SenPro & Rampage',
