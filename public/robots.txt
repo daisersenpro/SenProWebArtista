@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://senpro.netlify.app/sitemap.xml
