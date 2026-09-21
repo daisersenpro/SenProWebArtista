@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://senpro.netlify.app'),
-  title: 'SenPro | Rap Chileno - Hip Hop Independiente',
+  title: 'SenPro | Rap Chileno - Hip Hop',
   description:
     'SenPro - Rap chileno, barrio e identidad. Escucha música, lanzamientos y videos de Hip Hop underground directo desde Santiago, Chile.',
   icons: {
