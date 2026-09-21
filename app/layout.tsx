@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://senpro.netlify.app'),
   title: 'SenPro | Rap Chileno - Hip Hop Independiente',
   description:
     'SenPro - Rap chileno, barrio e identidad. Escucha música, lanzamientos y videos de Hip Hop underground directo desde Santiago, Chile.',
@@ -13,8 +14,6 @@ export const metadata: Metadata = {
     apple: '/images/logo.png',
   },
 }
-
-export const metadataBase = new URL('https://senpro.netlify.app')
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
