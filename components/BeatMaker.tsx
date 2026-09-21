@@ -52,7 +52,7 @@ export default function BeatMaker() {
     const gain = context.createGain()
     oscillator.frequency.setValueAtTime(150, time)
     oscillator.frequency.exponentialRampToValueAtTime(48, time + 0.16)
-    gain.gain.setValueAtTime(0.9, time)
+    gain.gain.setValueAtTime(1.15, time)
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2)
     oscillator.connect(gain).connect(context.destination)
     oscillator.start(time)
@@ -81,7 +81,7 @@ export default function BeatMaker() {
     const gain = context.createGain()
     oscillator.type = 'sawtooth'
     oscillator.frequency.setValueAtTime(55, time)
-    gain.gain.setValueAtTime(0.18, time)
+    gain.gain.setValueAtTime(0.3, time)
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2)
     oscillator.connect(gain).connect(context.destination)
     oscillator.start(time)
@@ -95,8 +95,8 @@ export default function BeatMaker() {
     const time = context.currentTime + 0.01
 
     if (activePattern.kick[step]) playKick(context, time)
-    if (activePattern.snare[step]) playNoise(context, time, 0.3, 0.16, 1400)
-    if (activePattern.hat[step]) playNoise(context, time, 0.11, 0.055, 6500)
+    if (activePattern.snare[step]) playNoise(context, time, 0.48, 0.16, 1400)
+    if (activePattern.hat[step]) playNoise(context, time, 0.2, 0.055, 6500)
     if (activePattern.bass[step]) playBass(context, time)
 
     setCurrentStep(step)

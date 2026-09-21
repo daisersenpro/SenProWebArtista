@@ -259,7 +259,7 @@ export default function Contact() {
           </div>
 
           <div
-            className="group relative mx-auto w-full max-w-[420px] cursor-pointer select-none"
+            className="group relative mx-auto w-full max-w-[390px] cursor-pointer select-none"
             onPointerLeave={stopScratchLoop}
             onFocus={() => setIsScratchActive(true)}
             onBlur={stopScratchLoop}
@@ -267,13 +267,13 @@ export default function Contact() {
             role="img"
             aria-label="Tornamesa con vinilo animado"
           >
-            <div className="relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-[radial-gradient(ellipse_at_top_left,#050505_0%,#070707_30%,#030303_100%)] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
+            <div className="relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-[radial-gradient(ellipse_at_top_left,#050505_0%,#070707_30%,#030303_100%)] p-4 shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
               <div className="absolute inset-0 pointer-events-none grain" />
 
               <div className="relative flex items-center justify-between">
                 <div>
-                  <h3 className="mt-1 text-xl font-extrabold text-amber-50 tracking-tight">Scratch Session</h3>
-                  <img src="/images/logo.png" alt="SenPro" className="mt-3 h-12 sm:h-14 w-auto" />
+                  <h3 className="mt-1 text-lg font-extrabold text-amber-50 tracking-tight">Scratch Session</h3>
+                  <img src="/images/logo.png" alt="SenPro" className="mt-2 h-10 sm:h-12 w-auto" />
                 </div>
                 <div className="rounded-full border border-amber-400/30 bg-amber-600/10 px-3 py-1 text-xs text-amber-200">
                   {isScratchActive ? 'SONANDO' : 'LISTO'}
@@ -282,9 +282,9 @@ export default function Contact() {
 
               {/* logo moved below title */}
 
-              <div className="mt-8 flex items-center justify-center">
+              <div className="mt-5 flex items-center justify-center">
                 <div
-                  className="relative h-[320px] w-[320px] rounded-full bg-[radial-gradient(circle_at_center,#0b0b0b_0%,#060606_55%,#000_100%)] shadow-[inset_0_0_0_12px_rgba(255,255,255,0.02),0_0_60px_rgba(0,0,0,0.7)] will-change-transform"
+                  className="relative h-[260px] w-[260px] rounded-full bg-[radial-gradient(circle_at_center,#0b0b0b_0%,#060606_55%,#000_100%)] shadow-[inset_0_0_0_10px_rgba(255,255,255,0.02),0_0_50px_rgba(0,0,0,0.7)] will-change-transform"
                   style={{
                     transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
                   }}
@@ -299,14 +299,14 @@ export default function Contact() {
                     className="vinyl-spin pointer-events-none absolute inset-4 rounded-full bg-[conic-gradient(from_0deg,#1f1f1f_0deg,#111_40deg,#272727_80deg,#090909_140deg,#1b1b1b_200deg,#111_260deg,#2a2a2a_320deg,#111_360deg)] shadow-inner ring-1 ring-amber-800/20"
                     style={{ transform: `rotate(${vinylRotation}deg)` }}
                   />
-                  <div className="pointer-events-none absolute inset-[22px] rounded-full border border-white/5" />
-                  <div className="pointer-events-none absolute inset-[70px] rounded-full border border-white/10" />
-                  <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 shadow-[0_0_0_10px_rgba(255,255,255,0.03)]" />
+                  <div className="pointer-events-none absolute inset-[18px] rounded-full border border-white/5" />
+                  <div className="pointer-events-none absolute inset-[56px] rounded-full border border-white/10" />
+                  <div className="pointer-events-none absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-700 shadow-[0_0_0_8px_rgba(255,255,255,0.03)]" />
                   <div
-                    className="pointer-events-none absolute left-1/2 top-[10px] h-[170px] w-[18px] -translate-x-1/2 origin-top rounded-full bg-gradient-to-b from-zinc-200 via-zinc-400 to-zinc-700 shadow-lg"
+                    className="pointer-events-none absolute left-1/2 top-[8px] h-[138px] w-[15px] -translate-x-1/2 origin-top rounded-full bg-gradient-to-b from-zinc-200 via-zinc-400 to-zinc-700 shadow-lg"
                     style={{ transform: `rotate(${isScratchActive ? 18 : 32}deg)` }}
                   />
-                  <div className="pointer-events-none absolute left-[58%] top-[62px] h-7 w-7 rounded-full border border-white/20 bg-black shadow-[0_0_18px_rgba(255,255,255,0.12)]" />
+                  <div className="pointer-events-none absolute left-[58%] top-[50px] h-6 w-6 rounded-full border border-white/20 bg-black shadow-[0_0_18px_rgba(255,255,255,0.12)]" />
                 </div>
               </div>
             </div>
