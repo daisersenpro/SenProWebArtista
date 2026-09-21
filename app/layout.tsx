@@ -5,9 +5,39 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://senpro.netlify.app'),
-  title: 'SenPro | Rap Chileno - Hip Hop',
+  title: 'SenPro | Rapero y productor de rap chileno',
   description:
-    'SenPro - Rap chileno, barrio e identidad. Escucha música, lanzamientos y videos de Hip Hop underground directo desde Santiago, Chile.',
+    'Sitio oficial de SenPro, rapero y productor de La Reina, Santiago de Chile. Escucha rap chileno, descubre videos, lanzamientos y novedades.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_CL',
+    url: '/',
+    siteName: 'SenPro',
+    title: 'SenPro | Rapero y productor de rap chileno',
+    description:
+      'Sitio oficial de SenPro, rapero y productor de La Reina, Santiago de Chile.',
+    images: [
+      {
+        url: '/images/hero-graffiti.png',
+        width: 1200,
+        height: 630,
+        alt: 'SenPro, rapero y productor de Santiago de Chile',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SenPro | Rapero y productor de rap chileno',
+    description:
+      'Sitio oficial de SenPro, rapero y productor de La Reina, Santiago de Chile.',
+    images: ['/images/hero-graffiti.png'],
+  },
+  authors: [{ name: 'SenPro' }],
+  creator: 'SenPro',
+  keywords: ['SenPro', 'rap chileno', 'hip hop chileno', 'rap de Santiago', 'rap de La Reina'],
   icons: {
     icon: '/images/logo.png',
     shortcut: '/images/logo.png',
