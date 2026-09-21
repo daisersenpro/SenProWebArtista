@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from 'react'
+import BeatMaker from './BeatMaker'
 
 export default function Contact() {
   const whatsappNumber = '56949728928'
@@ -309,6 +310,7 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+            <BeatMaker />
           </div>
         </div>
       </div>
