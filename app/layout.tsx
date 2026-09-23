@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     google: 'XObI1dQUtHmVv1PmtLbbqh5QGkXOi23xUFYrPUKNhTw',
   },
   icons: {
-    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '512x512' }],
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    icon: [{ url: '/favicon-senpro.png', type: 'image/png', sizes: '512x512' }],
+    shortcut: '/favicon-senpro.png',
+    apple: '/favicon-senpro.png',
   },
 }
 
