@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   creator: 'SenPro',
   keywords: ['SenPro', 'rap chileno', 'hip hop chileno', 'rap de Santiago', 'rap de La Reina'],
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '512x512' }],
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
