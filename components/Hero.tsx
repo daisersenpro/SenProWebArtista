@@ -45,7 +45,14 @@ export default function Hero() {
               aria-hidden
             />
 
-            <Image src="/images/logo.png" alt="SENPRO" width={420} height={140} priority />
+            <Image
+              src="/images/logo.png"
+              alt="SENPRO"
+              width={420}
+              height={140}
+              priority
+              className="hero-logo"
+            />
             <div className="smoke-overlay" aria-hidden>
               <div className="smoke-layer" />
               <div className="smoke-layer alt" />

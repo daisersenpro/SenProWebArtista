@@ -32,6 +32,13 @@ body {
   letter-spacing: 0.06em;
 }
 
+.hero-logo {
+  filter: drop-shadow(2px 0 0 rgba(0, 0, 0, 0.95))
+    drop-shadow(-2px 0 0 rgba(0, 0, 0, 0.95))
+    drop-shadow(0 2px 0 rgba(0, 0, 0, 0.95))
+    drop-shadow(0 -2px 0 rgba(0, 0, 0, 0.95));
+}
+
 /* Smoke / vapor effect */
 .smoke-overlay {
   position: absolute;
