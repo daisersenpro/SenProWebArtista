@@ -37,21 +37,12 @@ export default function Hero() {
           transition={{ duration: 1, x: { duration: 7, repeat: Infinity, ease: 'easeInOut' } }}
         >
           <div className="relative mx-auto w-[280px] md:w-[420px]">
-            {/* Circular animated ring */}
-            <div className="absolute -inset-4 md:-inset-6 rounded-full border-2 border-white/20" 
-              style={{
-                animation: 'spin 8s linear infinite',
-              }}
-              aria-hidden
-            />
-
             <Image
-              src="/images/logo.png"
+              src="/images/logonuevo.png"
               alt="SENPRO"
               width={420}
-              height={140}
+              height={420}
               priority
-              className="hero-logo"
             />
             <div className="smoke-overlay" aria-hidden>
               <div className="smoke-layer" />

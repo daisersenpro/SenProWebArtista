@@ -7,7 +7,7 @@ export default function Head() {
     '@type': 'Organization',
     name: 'SenPro',
     url: siteUrl,
-    logo: `${siteUrl}/images/logo.png`,
+    logo: `${siteUrl}/images/logonuevo.png`,
     sameAs: [],
   }
 

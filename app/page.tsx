@@ -18,7 +18,7 @@ export default function Home() {
             '@type': 'Person',
             name: 'SenPro',
             url: 'https://senpro.netlify.app/',
-            image: 'https://senpro.netlify.app/images/logo.png',
+            image: 'https://senpro.netlify.app/images/logonuevo.png',
             jobTitle: 'Rapero y productor musical',
             description:
               'SenPro es un rapero y productor musical de La Reina, Santiago de Chile.',

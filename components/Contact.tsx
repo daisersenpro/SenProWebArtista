@@ -273,7 +273,7 @@ export default function Contact() {
               <div className="relative flex items-center justify-between">
                 <div>
                   <h3 className="mt-1 text-lg font-extrabold text-amber-50 tracking-tight">Scratch Session</h3>
-                  <img src="/images/logo.png" alt="SenPro" className="mt-2 h-10 sm:h-12 w-auto" />
+                  <img src="/images/logonuevo.png" alt="SenPro" className="mt-2 h-10 sm:h-12 w-auto" />
                 </div>
                 <div className="rounded-full border border-amber-400/30 bg-amber-600/10 px-3 py-1 text-xs text-amber-200">
                   {isScratchActive ? 'SONANDO' : 'LISTO'}
