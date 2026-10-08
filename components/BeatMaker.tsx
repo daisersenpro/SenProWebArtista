@@ -7,10 +7,10 @@ type TrackName = 'kick' | 'snare' | 'hat' | 'bass'
 type Pattern = Record<TrackName, boolean[]>
 
 const INITIAL_PATTERN: Pattern = {
-  kick: [true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false],
+  kick: [true, false, false, true, false, false, true, false, true, false, false, true, false, false, true, false],
   snare: [false, false, false, false, true, false, false, false, false, false, false, false, true, false, false, false],
   hat: [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false],
-  bass: [true, false, false, true, false, false, true, false, true, false, false, true, false, false, true, false],
+  bass: [true, false, false, false, false, false, true, false, true, false, false, true, false, false, true, false],
 }
 
 const TRACK_LABELS: Record<TrackName, string> = {
@@ -76,16 +76,32 @@ export default function BeatMaker() {
     source.start(time)
   }
 
-  const playBass = (context: AudioContext, time: number) => {
+  const playBass = (context: AudioContext, time: number, step: number) => {
     const oscillator = context.createOscillator()
+    const bodyOscillator = context.createOscillator()
     const gain = context.createGain()
-    oscillator.type = 'sawtooth'
-    oscillator.frequency.setValueAtTime(55, time)
-    gain.gain.setValueAtTime(0.3, time)
-    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2)
+    const bodyGain = context.createGain()
+    const pitchVariation = (Math.random() - 0.5) * 4
+    const accent = step % 8 === 0 ? 1.1 : 0.92
+
+    oscillator.type = 'sine'
+    oscillator.frequency.setValueAtTime(72 + pitchVariation, time)
+    oscillator.frequency.exponentialRampToValueAtTime(42, time + 0.36)
+    bodyOscillator.type = 'triangle'
+    bodyOscillator.frequency.setValueAtTime(144 + pitchVariation, time)
+    bodyOscillator.frequency.exponentialRampToValueAtTime(84, time + 0.28)
+    gain.gain.setValueAtTime(0.001, time)
+    gain.gain.exponentialRampToValueAtTime(0.38 * accent, time + 0.012)
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.58)
+    bodyGain.gain.setValueAtTime(0.001, time)
+    bodyGain.gain.exponentialRampToValueAtTime(0.055 * accent, time + 0.008)
+    bodyGain.gain.exponentialRampToValueAtTime(0.001, time + 0.34)
     oscillator.connect(gain).connect(context.destination)
+    bodyOscillator.connect(bodyGain).connect(context.destination)
     oscillator.start(time)
-    oscillator.stop(time + 0.21)
+    bodyOscillator.start(time)
+    oscillator.stop(time + 0.59)
+    bodyOscillator.stop(time + 0.35)
   }
 
   const playStep = () => {
@@ -97,7 +113,7 @@ export default function BeatMaker() {
     if (activePattern.kick[step]) playKick(context, time)
     if (activePattern.snare[step]) playNoise(context, time, 0.48, 0.16, 1400)
     if (activePattern.hat[step]) playNoise(context, time, 0.2, 0.055, 6500)
-    if (activePattern.bass[step]) playBass(context, time)
+    if (activePattern.bass[step]) playBass(context, time, step)
 
     setCurrentStep(step)
     stepRef.current = (step + 1) % 16
