@@ -6,7 +6,7 @@ type VideoItem = {
   title: string
   description: string
   hashtags: string
-  platform: 'youtube' | 'instagram'
+  platform: 'youtube' | 'instagram' | 'tiktok'
   embedUrl: string
   watchUrl: string
 }
@@ -38,6 +38,15 @@ const videos: VideoItem[] = [
     platform: 'instagram',
     embedUrl: 'https://www.instagram.com/reel/C75NMVAgty0/embed',
     watchUrl: 'https://www.instagram.com/reel/C75NMVAgty0/?igsh=NDVhd3M4NWFmNnYy',
+  },
+  {
+    title: 'Mamacita | Presentación en Club Hell',
+    description:
+      'Presentación de SenPro en Club Hell interpretando Mamacita, registrada y compartida en TikTok.',
+    hashtags: '#Mamacita #ClubHell #SenPro #Live #QuePasa #Kogollete',
+    platform: 'tiktok',
+    embedUrl: 'https://www.tiktok.com/player/v1/7540513463009856773',
+    watchUrl: 'https://www.tiktok.com/@senpro_daiser/video/7540513463009856773',
   },
 ]
 
@@ -192,6 +201,27 @@ export default function VideosSection() {
                         </a>
                       </div>
                     )
+                  ) : activeVideo.platform === 'tiktok' ? (
+                    <div className="relative h-full w-full">
+                      <iframe
+                        className="mx-auto h-full max-w-[360px]"
+                        src={activeVideo.embedUrl}
+                        title={activeVideo.title}
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        allowFullScreen
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalIndex(activeIndex)
+                          setIsPaused(true)
+                        }}
+                        aria-label="Abrir video de TikTok en pantalla completa"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 p-4 text-white shadow-lg"
+                      >
+                        ▶
+                      </button>
+                    </div>
                   ) : (
                     <div className="relative h-full w-full">
                       <iframe
@@ -236,7 +266,11 @@ export default function VideosSection() {
                 rel="noreferrer"
                 className="inline-flex items-center justify-center rounded-md bg-red-600 px-5 py-3 font-semibold text-white transition hover:bg-red-500"
               >
-                {activeVideo.platform === 'instagram' ? 'Ver en Instagram' : 'Ver en YouTube'}
+                {activeVideo.platform === 'instagram'
+                  ? 'Ver en Instagram'
+                  : activeVideo.platform === 'tiktok'
+                    ? 'Ver en TikTok'
+                    : 'Ver en YouTube'}
               </a>
             </div>
           </div>
@@ -285,7 +319,7 @@ export default function VideosSection() {
                 aria-label={videos[modalIndex].title}
               >
 
-                {/* Instagram: show a comfortable vertical rectangle; YouTube: larger 16:9 */}
+                {/* Vertical players use a narrower frame; YouTube stays widescreen. */}
                 {videos[modalIndex].platform === 'instagram' ? (
                   <div className="mx-auto rounded-md bg-zinc-900 p-3" style={{ width: 'min(92vw,420px)' }}>
                     <div style={{ aspectRatio: '9/16', width: '100%' }}>
@@ -294,6 +328,18 @@ export default function VideosSection() {
                         src={videos[modalIndex].embedUrl}
                         title={videos[modalIndex].title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                ) : videos[modalIndex].platform === 'tiktok' ? (
+                  <div className="mx-auto rounded-md bg-zinc-900 p-3" style={{ width: 'min(92vw,420px)' }}>
+                    <div style={{ aspectRatio: '9/16', width: '100%' }}>
+                      <iframe
+                        className="h-full w-full rounded"
+                        src={`${videos[modalIndex].embedUrl}?autoplay=1`}
+                        title={videos[modalIndex].title}
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                         allowFullScreen
                       />
                     </div>
