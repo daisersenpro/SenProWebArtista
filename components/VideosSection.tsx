@@ -36,7 +36,7 @@ const videos: VideoItem[] = [
       'Aquí un breve video de mi presentación en el conmemorativo de #CristianG y #FlacoR (Q.E.P.D.), donde participé con mucho cariño y respeto. Gracias a Freeky Gee por la grabación.',
     hashtags: '#SenPro #QuePasa!',
     platform: 'instagram',
-    embedUrl: 'https://www.instagram.com/reel/C75NMVAgty0/embed',
+    embedUrl: 'https://www.instagram.com/reel/C75NMVAgty0/embed/',
     watchUrl: 'https://www.instagram.com/reel/C75NMVAgty0/?igsh=NDVhd3M4NWFmNnYy',
   },
   {
@@ -187,8 +187,8 @@ export default function VideosSection() {
                             <circle cx="12" cy="12" r="3" />
                           </svg>
                           <div className="text-left">
-                            <p className="text-white font-semibold">Ver historia en Instagram</p>
-                            <p className="text-sm text-gray-300">Invitación — Agrupación Alcanza tu Estrella (SenPro)</p>
+                            <p className="text-white font-semibold">Ver Reel en Instagram</p>
+                            <p className="text-sm text-gray-300">Presentación de SenPro en Instagram</p>
                           </div>
                         </div>
                         <a
@@ -197,7 +197,7 @@ export default function VideosSection() {
                           rel="noreferrer"
                           className="mt-2 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-pink-500 to-yellow-400 px-4 py-2 text-sm font-semibold text-black shadow"
                         >
-                          Abrir en Instagram
+                          Abrir Reel en Instagram
                         </a>
                       </div>
                     )
@@ -327,6 +327,9 @@ export default function VideosSection() {
                         className="h-full w-full rounded"
                         src={videos[modalIndex].embedUrl}
                         title={videos[modalIndex].title}
+                          loading="lazy"
+                          scrolling="no"
+                          frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                       />
