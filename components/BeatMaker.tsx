@@ -15,6 +15,7 @@ type TrackId =
   | 'fx'
 
 type Pattern = Record<TrackId, boolean[]>
+type NoteGrid = Record<TrackId, boolean[][]>
 
 type SampleTrack = {
   id: TrackId
@@ -53,11 +54,24 @@ const TRACKS: SampleTrack[] = [
 const INITIAL_PATTERN: Pattern = Object.fromEntries(
   TRACKS.map((track) => [track.id, track.pattern]),
 ) as Pattern
+const PIANO_NOTES = ['C5', 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C4']
+const INITIAL_NOTES: NoteGrid = Object.fromEntries(
+  TRACKS.map((track) => [
+    track.id,
+    Array.from({ length: PIANO_NOTES.length }, (_, note) =>
+      makePattern(...track.pattern.map((active, step) => (active && note === 11 ? step : -1)).filter((step) => step >= 0)),
+    ),
+  ]),
+) as NoteGrid
 
 const sampleUrl = (file: string) => `/sounds/beat/${encodeURIComponent(file)}`
 
 export default function BeatMaker() {
   const [pattern, setPattern] = useState<Pattern>(INITIAL_PATTERN)
+  const [noteGrid, setNoteGrid] = useState<NoteGrid>(INITIAL_NOTES)
+  const [muted, setMuted] = useState<Record<TrackId, boolean>>({} as Record<TrackId, boolean>)
+  const [solo, setSolo] = useState<TrackId | null>(null)
+  const [pianoTrack, setPianoTrack] = useState<TrackId | null>(null)
   const [bpm, setBpm] = useState(92)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -113,13 +127,14 @@ export default function BeatMaker() {
     }
   }
 
-  const playSample = (track: SampleTrack, time = 0) => {
+  const playSample = (track: SampleTrack, time = 0, semitones = 0) => {
     const context = getAudioContext()
     const buffer = buffersRef.current[track.file]
     if (!buffer) return
     const source = context.createBufferSource()
     const gain = context.createGain()
     source.buffer = buffer
+    source.playbackRate.value = 2 ** (semitones / 12)
     gain.gain.value = track.volume
     source.connect(gain).connect(context.destination)
     source.start(time || context.currentTime)
@@ -130,7 +145,11 @@ export default function BeatMaker() {
     const step = stepRef.current
     const time = context.currentTime + 0.01
     TRACKS.forEach((track) => {
-      if (patternRef.current[track.id][step]) playSample(track, time)
+      const isAudible = !muted[track.id] && (!solo || solo === track.id)
+      if (!isAudible) return
+      noteGrid[track.id].forEach((row, note) => {
+        if (row[step]) playSample(track, time, 11 - note)
+      })
     })
     setCurrentStep(step)
     stepRef.current = (step + 1) % STEPS
@@ -190,7 +209,20 @@ export default function BeatMaker() {
     if (!isPlaying) return
     if (timerRef.current) window.clearInterval(timerRef.current)
     timerRef.current = window.setInterval(playStep, (60_000 / bpm) / 4)
-  }, [bpm, isPlaying])
+  }, [bpm, isPlaying, muted, noteGrid, solo])
+
+  const toggleNote = (track: TrackId, note: number, step: number) => {
+    setNoteGrid((current) => ({
+      ...current,
+      [track]: current[track].map((row, rowIndex) =>
+        rowIndex === note ? row.map((active, index) => (index === step ? !active : active)) : row,
+      ),
+    }))
+    setPattern((current) => ({
+      ...current,
+      [track]: current[track].map((active, index) => (index === step ? !active : active)),
+    }))
+  }
 
   return (
     <div className="mt-6 rounded-[1.5rem] border border-amber-500/20 bg-zinc-950/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.4)] sm:p-5">
@@ -220,10 +252,14 @@ export default function BeatMaker() {
           </div>
           {TRACKS.map((track) => (
             <div key={track.id} className="grid grid-cols-[6rem_repeat(16,minmax(0,1fr))] items-center gap-1">
-              <button type="button" onClick={() => void previewTrack(track)} className="flex min-w-0 items-center gap-1.5 rounded px-1 py-1 text-left transition hover:bg-white/10" title={`Preescuchar ${track.file}`}>
-                <span className={`h-2 w-2 shrink-0 rounded-full ${TRACK_COLOR_CLASSES[track.color].dot}`} />
-                <span className="truncate text-[10px] font-semibold uppercase text-zinc-300">{track.label}</span>
-              </button>
+              <div className="flex min-w-0 items-center gap-1">
+                <button type="button" onClick={() => void previewTrack(track)} className="flex min-w-0 flex-1 items-center gap-1.5 rounded px-1 py-1 text-left transition hover:bg-white/10" title={`Preescuchar ${track.file}`}>
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${TRACK_COLOR_CLASSES[track.color].dot}`} />
+                  <span className="truncate text-[10px] font-semibold uppercase text-zinc-300">{track.label}</span>
+                </button>
+                <button type="button" onClick={() => setMuted((current) => ({ ...current, [track.id]: !current[track.id] }))} aria-label={`${muted[track.id] ? 'Activar' : 'Silenciar'} ${track.label}`} className={`rounded px-1 text-[9px] font-bold ${muted[track.id] ? 'bg-rose-500 text-white' : 'text-zinc-500 hover:bg-zinc-800 hover:text-white'}`}>{muted[track.id] ? 'M' : 'm'}</button>
+                <button type="button" onClick={() => setSolo((current) => current === track.id ? null : track.id)} aria-label={`${solo === track.id ? 'Quitar solo de' : 'Dejar en solo'} ${track.label}`} className={`rounded px-1 text-[9px] font-bold ${solo === track.id ? 'bg-amber-400 text-black' : 'text-zinc-500 hover:bg-zinc-800 hover:text-white'}`}>S</button>
+              </div>
               {pattern[track.id].map((enabled, step) => (
                 <button
                   key={`${track.id}-${step}`}
@@ -238,6 +274,41 @@ export default function BeatMaker() {
           ))}
         </div>
       </div>
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] text-zinc-500">
+        <span><b className="text-zinc-300">M</b> silenciar</span>
+        <span><b className="text-zinc-300">S</b> solo</span>
+        <span>Haz clic en el canal para preescuchar.</span>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {TRACKS.map((track) => (
+          <button key={track.id} type="button" onClick={() => setPianoTrack((current) => current === track.id ? null : track.id)} className={`rounded-full border px-3 py-1 text-[10px] uppercase tracking-wider transition ${pianoTrack === track.id ? 'border-amber-400 bg-amber-400 text-black' : 'border-zinc-700 text-zinc-400 hover:border-amber-400 hover:text-white'}`}>
+            {pianoTrack === track.id ? 'Cerrar' : 'Piano'} · {track.label}
+          </button>
+        ))}
+      </div>
+      {pianoTrack && (
+        <div className="mt-4 rounded-xl border border-violet-500/30 bg-black/40 p-3">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-violet-300">Piano roll · {TRACKS.find((track) => track.id === pianoTrack)?.label}</p>
+              <p className="text-[10px] text-zinc-500">Selecciona notas y tiempos. La afinación cambia al reproducir.</p>
+            </div>
+            <button type="button" onClick={() => setPianoTrack(null)} className="text-xs text-zinc-500 hover:text-white">Cerrar</button>
+          </div>
+          <div className="overflow-x-auto">
+            <div className="min-w-[34rem]">
+              {noteGrid[pianoTrack].map((row, note) => (
+                <div key={`${pianoTrack}-${note}`} className="grid grid-cols-[2.5rem_repeat(16,minmax(0,1fr))] gap-1 border-b border-zinc-900/80 py-0.5">
+                  <span className={`self-center text-[9px] ${note % 2 === 0 ? 'text-violet-300' : 'text-zinc-600'}`}>{PIANO_NOTES[note]}</span>
+                  {row.map((active, step) => (
+                    <button key={`${note}-${step}`} type="button" aria-label={`${PIANO_NOTES[note]} tiempo ${step + 1}`} aria-pressed={active} onClick={() => toggleNote(pianoTrack, note, step)} className={`h-5 rounded-sm border ${active ? 'border-violet-300 bg-violet-500' : note % 2 === 0 ? 'border-zinc-700 bg-zinc-800' : 'border-zinc-800 bg-zinc-900'} ${currentStep === step ? 'ring-1 ring-white' : ''}`} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       {error && <p role="alert" className="mt-3 text-xs text-rose-400">{error}</p>}
       <p className="mt-3 text-xs text-zinc-500">Cada cuadro es un golpe de la vuelta. Los puntos de color son los samples reales de tu carpeta beat.</p>
     </div>
