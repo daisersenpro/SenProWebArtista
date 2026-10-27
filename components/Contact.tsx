@@ -259,7 +259,7 @@ export default function Contact() {
           </div>
 
           <div
-            className="group relative mx-auto w-full max-w-[390px] cursor-pointer select-none"
+            className="group relative mx-auto w-full cursor-pointer select-none"
             onPointerLeave={stopScratchLoop}
             onFocus={() => setIsScratchActive(true)}
             onBlur={stopScratchLoop}
@@ -267,7 +267,7 @@ export default function Contact() {
             role="img"
             aria-label="Tornamesa con vinilo animado"
           >
-            <div className="relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-[radial-gradient(ellipse_at_top_left,#050505_0%,#070707_30%,#030303_100%)] p-4 shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
+            <div className="relative mx-auto w-full max-w-[390px] overflow-hidden rounded-[2rem] border border-amber-500/20 bg-[radial-gradient(ellipse_at_top_left,#050505_0%,#070707_30%,#030303_100%)] p-4 shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
               <div className="absolute inset-0 pointer-events-none grain" />
 
               <div className="relative flex items-center justify-between">
@@ -310,6 +310,8 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="lg:col-span-2">
             <BeatMaker />
           </div>
         </div>
