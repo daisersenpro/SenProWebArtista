@@ -42,9 +42,14 @@ export const metadata: Metadata = {
     google: 'XObI1dQUtHmVv1PmtLbbqh5QGkXOi23xUFYrPUKNhTw',
   },
   icons: {
-    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '48x48' }],
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
+      { url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+      { url: '/favicon-192x192.png', type: 'image/png', sizes: '192x192' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/favicon-192x192.png',
   },
 }
 
